@@ -13,5 +13,9 @@ Aplikasi ini dibuat untuk mempermudah petugas atau admin dalam mengelola data pe
 3. Buka terminal pada folder project.
 4. Jalankan perintah:
 
+## Perbedaan Model, View, dan Controller
+
+Model bertanggung jawab mengelola data dan aturan bisnis yang berkaitan dengan database. View bertanggung jawab menampilkan halaman yang dilihat oleh pengguna. Controller menerima request pengguna, memprosesnya melalui Model, kemudian mengirimkan hasilnya kepada View.
+
    ```bash
    php artisan serve
