@@ -16,3 +16,8 @@ Route::resource('members', MemberController::class);
 Route::resource('loans', LoanController::class);
 Route::put('/loans/{id}/kembalikan', [LoanController::class, 'kembalikan'])
     ->name('loans.kembalikan');
+Route::prefix('admin')->group(function () {
+    Route::get('/info', function () {
+        return 'Halaman informasi admin';
+    });
+});
