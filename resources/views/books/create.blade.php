@@ -4,7 +4,7 @@
 
 @section('content')
     <p>
-        <a href="'books.index') }}← Kembali ke daftar</a>
+        <a href="{{ route('books.index') }}">← Kembali ke daftar</a>
     </p>
 
     <h1>Tambah Buku</h1>

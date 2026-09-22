@@ -10,7 +10,7 @@
     <table>
         <thead>
             <tr>
-                <th>ID</th>
+                <th>ID Kategori</th>
                 <th>Judul</th>
                 <th>Penulis</th>
                 <th>Penerbit</th>
@@ -23,7 +23,7 @@
         <tbody>
             @forelse ($books as $book)
                 <tr>
-                    <td>{{ $book['id'] }}</td>
+                    <td>{{ $book['category_id'] }}</td>
                     <td>{{ $book['judul'] }}</td>
                     <td>{{ $book['penulis'] }}</td>
                     <td>{{ $book['penerbit'] }}</td>
@@ -50,5 +50,7 @@
         </tbody>
     </table>
 
-    <p><em>Catatan: data di atas masih data dummy (array statis di Controller), belum dari database. Migration &amp; Model Eloquent baru dibuat di Pertemuan 5.</em></p>
+    {{ $books->links() }}
+
+    <p><em>Catatan: kolom kategori masih menampilkan ID. Menampilkan nama kategori memerlukan Eloquent Relationship, dipelajari di Pertemuan 7.</em></p>
 @endsection
