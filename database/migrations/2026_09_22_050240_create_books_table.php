@@ -11,7 +11,6 @@ return new class extends Migration
      */
     public function up(): void
     {
-// File: database/migrations/xxxx_create_books_table.php
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('judul', 200);

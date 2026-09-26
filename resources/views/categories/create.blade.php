@@ -1,64 +1,26 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Buku')
+@section('title', 'Tambah Kategori')
 
 @section('content')
     <p>
-        <a href="{{ route('books.index') }i ke daftar</a>
+        <a href="{{ route('categories.index') }}">← Kembali ke daftar</a>
     </p>
 
-    <h1>Tambah Buku</h1>
+    <h1>Tambah Kategori</h1>
 
-    <form action="{{ route('books.store') }}   <label for="judul">Judul</label>
-        <input type="text" name="judul" id="judul" value="{{ old('judul') }}">
-        @error('judul')
+    <form action="{{ route('categories.store') }}" method="POST">
+        @csrf
+
+        <label for="nama_kategori">Nama Kategori</label>
+        <input type="text" name="nama_kategori" id="nama_kategori" value="{{ old('nama_kategori') }}">
+        @error('nama_kategori')
             <div class="error">{{ $message }}</div>
         @enderror
 
-        <label for="penulis">Penulis</label>
-        <input type="text" name="penulis" id="penulis" value="{{ old('penulis') }}">
-        @error('penulis')
-            <div class="error">{{ $message }}</div>
-        @enderror
-
-        <label for="penerbit">Penerbit</label>
-        <input type="text" name="penerbit" id="penerbit" value="{{ old('penerbit') }}">
-        @error('penerbit')
-            <div class="error">{{ $message }}</div>
-        @enderror
-
-        <label for="tahun_terbit">Tahun Terbit</label>
-        <input type="number" name="tahun_terbit" id="tahun_terbit" value="{{ old('tahun_terbit') }}">
-        @error('tahun_terbit')
-            <div class="error">{{ $message }}</div>
-        @enderror
-
-        <label for="isbn">ISBN (opsional)</label>
-        <input type="text" name="isbn" id="isbn" value="{{ old('isbn') }}">
-        @error('isbn')
-            <div class="error">{{ $message }}</div>
-        @enderror
-
-        <label for="stok">Stok</label>
-        <input type="number" name="stok" id="stok" value="{{ old('stok', 1) }}">
-        @error('stok')
-            <div class="error">{{ $message }}</div>
-        @enderror
-
-        <label for="category_id">Kategori</label>
-        <select name="category_id" id="category_id">
-            <option value="">-- Pilih Kategori --</option>
-
-            @foreach ($categories as $category)
-                <option
-                    value="{{ $category['id'] }}"
-                    @selected(old('category_id') == $category['id'])
-                >
-                    {{ $category['nama_kategori'] }}
-                </option>
-            @endforeach
-        </select>
-        @error('category_id')
+        <label for="deskripsi">Deskripsi (opsional)</label>
+        <textarea name="deskripsi" id="deskripsi" rows="4">{{ old('deskripsi') }}</textarea>
+        @error('deskripsi')
             <div class="error">{{ $message }}</div>
         @enderror
 

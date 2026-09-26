@@ -10,7 +10,7 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+    { 
         Schema::create('users', function (Blueprint $table) {
             $table->id();
             $table->string('name');
@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'petugas'])->default('petugas');
             $table->rememberToken();
             $table->timestamps();
-        });    
+        });  
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
