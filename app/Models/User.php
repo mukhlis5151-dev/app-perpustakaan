@@ -7,6 +7,7 @@ use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -24,7 +25,7 @@ class User extends Authenticatable
         'role',
     ];
 
-    /**
+    /*
      * Get the attributes that should be cast.
      *
      * @return array<string, string>
@@ -35,5 +36,10 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function loans(): HasMany
+    {
+        return $this->hasMany(Loan::class);
     }
 }

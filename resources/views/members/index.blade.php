@@ -1,3 +1,4 @@
+{{-- File: resources/views/members/index.blade.php --}}
 @extends('layouts.app')
 
 @section('title', 'Daftar Anggota')
@@ -6,14 +7,6 @@
     <h1>Daftar Anggota</h1>
 
     <p><a href="{{ route('members.create') }}" class="btn">+ Tambah Anggota</a></p>
-
-    <form action="{{ route('members.index') }}" method="GET">
-        <input type="text" name="search" placeholder="Cari nama anggota..." value="{{ request('search') }}">
-        <button type="submit" class="btn">Cari</button>
-        @if (request('search'))
-            <a href="{{ route('members.index') }}">Reset</a>
-        @endif
-    </form>
 
     <table>
         <thead>
@@ -56,5 +49,5 @@
         </tbody>
     </table>
 
-    <p>{{ $members->appends(request()->query())->links() }}</p>
+    {{ $members->links() }}
 @endsection

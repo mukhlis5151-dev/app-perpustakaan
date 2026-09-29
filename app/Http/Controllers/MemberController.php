@@ -5,16 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreMemberRequest;
 use App\Models\Member;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class MemberController extends Controller
 {
     public function index()
     {
-        $members = Member::when(request('search'), function ($query, $search) {
-                return $query->where('nama', 'like', "%{$search}%");
-            })
-            ->paginate(10);
+        $members = Member::paginate(10);
 
         return view('members.index', compact('members'));
     }
@@ -36,7 +32,7 @@ class MemberController extends Controller
 
     public function show(string $id)
     {
-        $member = Member::findOrFail($id);
+        $member = Member::with(['loans.loanItems.book', 'loans.user'])->findOrFail($id);
 
         return view('members.show', compact('member'));
     }
@@ -54,22 +50,11 @@ class MemberController extends Controller
 
         $validated = $request->validate([
             'nama' => 'required|string|max:100',
-            'nim' => ['required', 'string', 'max:20', Rule::unique('members', 'nim')->ignore($member->id)],
-            'email' => ['required', 'email', 'max:100', Rule::unique('members', 'email')->ignore($member->id)],
+            'nim' => 'required|string|max:20|unique:members,nim,'.$member->id,
+            'email' => 'required|email|max:100|unique:members,email,'.$member->id,
             'nomor_telepon' => 'required|string|max:15',
             'alamat' => 'required|string',
             'status' => 'required|in:aktif,nonaktif',
-        ], [
-            'nama.required' => 'Nama anggota wajib diisi.',
-            'nim.required' => 'NIM wajib diisi.',
-            'nim.unique' => 'NIM ini sudah terdaftar sebagai anggota lain.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email ini sudah terdaftar sebagai anggota lain.',
-            'nomor_telepon.required' => 'Nomor telepon wajib diisi.',
-            'alamat.required' => 'Alamat wajib diisi.',
-            'status.required' => 'Status anggota wajib dipilih.',
-            'status.in' => 'Status anggota harus aktif atau nonaktif.',
         ]);
 
         $member->update($validated);
