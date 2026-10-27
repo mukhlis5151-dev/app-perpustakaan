@@ -6,6 +6,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProfileController;
 
 // Public
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
@@ -22,6 +23,8 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('categories', CategoryController::class)->except(['show']);
     });
 
+    Route::get('/profil', [ProfileController::class, 'show'])->name('profil.show');
+    Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profil.password');
     Route::resource('books', BookController::class);
     Route::resource('members', MemberController::class);
     Route::resource('loans', LoanController::class);
