@@ -1,58 +1,156 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# App Perpustakaan
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi web **Perpustakaan Digital Kampus** untuk mengelola kategori, buku, anggota, dan transaksi peminjaman. Dibuat dengan Laravel sebagai proyek praktikum (Pertemuan 1 sampai 10).
 
-## About Laravel
+## Fitur
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- Autentikasi (login dan logout) dengan dua role: **admin** dan **petugas**
+- CRUD **buku**, **anggota**, dan **peminjaman** (satu transaksi dapat memuat beberapa buku)
+- CRUD **kategori** (khusus admin)
+- **Dashboard** statistik dan halaman **Laporan Peminjaman** yang mengambil data dari REST API milik aplikasi sendiri (`GET /api/stats` dan `GET /api/loans`)
+- **REST API** berformat JSON untuk buku, anggota, peminjaman, dan statistik
+- Seeder dan Factory untuk data demo bergaya Indonesia
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Komponen | Versi |
+|---|---|
+| PHP | 8.3 atau lebih baru |
+| Laravel | 13 |
+| Database | MySQL |
+| Dependency manager | Composer |
+| Lingkungan lokal | Laragon (Windows) |
 
-## Learning Laravel
+Node.js dan npm **tidak diperlukan**: tampilan memakai CSS sederhana di dalam layout Blade.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Instalasi
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Pastikan PHP, Composer, dan MySQL sudah tersedia (di Laragon: tekan **Start All**).
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+**1. Clone repository**
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/mukhlis5151-dev/app-perpustakaan.git
+cd app-perpustakaan
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+**2. Pasang dependency**
 
-## Contributing
+```bash
+composer install
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+**3. Salin file environment dan buat application key**
 
-## Code of Conduct
+```bash
+copy .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Di macOS/Linux, ganti `copy` dengan `cp`.
 
-## Security Vulnerabilities
+**4. Buat database MySQL**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Buat database kosong bernama `db_perpustakaan` lewat HeidiSQL/phpMyAdmin, atau lewat terminal:
 
-## License
+```bash
+mysql -u root -e "CREATE DATABASE db_perpustakaan CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+**5. Atur `.env`**
+
+Buka `.env`. Ubah blok database (di `.env.example` default-nya SQLite) menjadi:
+
+```
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=db_perpustakaan
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Pastikan dua variabel ini juga ada di `.env`:
+
+| Variabel | Nilai | Fungsi |
+|---|---|---|
+| `INTERNAL_API_URL` | `http://127.0.0.1:8011` | alamat server kedua yang dipanggil Dashboard dan Laporan untuk mengambil data dari API |
+| `APP_FAKER_LOCALE` | `id_ID` | membuat data seeder bergaya Indonesia |
+
+**6. Buat tabel dan isi data demo**
+
+```bash
+php artisan migrate:fresh --seed
+```
+
+Hasilnya: 3 user, 5 kategori, 20 buku, 15 anggota, dan 10 transaksi peminjaman. Jalankan perintah ini **sebelum** membuka aplikasi di browser.
+
+## Menjalankan Aplikasi
+
+Aplikasi membutuhkan **dua server sekaligus**. Buka dua terminal di folder project:
+
+**Terminal 1, untuk browser:**
+
+```bash
+php artisan serve --port=8000
+```
+
+**Terminal 2, khusus panggilan API internal:**
+
+```bash
+php artisan serve --port=8011
+```
+
+Lalu buka `http://127.0.0.1:8000`.
+
+**Kenapa dua server?** `php artisan serve` hanya memproses satu request pada satu waktu. Kalau Dashboard memanggil `/api/stats` ke port yang sama, request kedua itu menunggu request pertama selesai, sementara request pertama menunggu balasan request kedua (deadlock). Server kedua di port 8011 menghindarinya. Kalau server kedua mati, halaman Dashboard dan Laporan tetap tampil, tetapi berisi angka 0 dan tabel kosong.
+
+## Akun Demo
+
+Dibuat otomatis oleh `UserSeeder`:
+
+| Nama | Email | Password | Role |
+|---|---|---|---|
+| Bambang Sutrisno | `admin@pens.ac.id` | `password` | admin |
+| Siti Rahmawati | `petugas1@pens.ac.id` | `password` | petugas |
+| Ahmad Fauzi | `petugas2@pens.ac.id` | `password` | petugas |
+
+Menu **Kategori** hanya tampil untuk role admin.
+
+## Endpoint REST API
+
+Base URL: `http://127.0.0.1:8000/api`. Semua balasan berformat JSON. API ini belum memakai autentikasi (hanya untuk keperluan pembelajaran).
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `/books` | daftar buku (10 per halaman; filter `?judul=` dan `?category_id=`) |
+| GET | `/books/{id}` | detail satu buku |
+| POST | `/books` | tambah buku |
+| PUT | `/books/{id}` | ubah buku |
+| DELETE | `/books/{id}` | hapus buku |
+| GET | `/members` | daftar anggota (10 per halaman) |
+| GET | `/members/{id}` | detail satu anggota |
+| GET | `/loans` | daftar peminjaman beserta anggota, petugas, dan buku |
+| POST | `/loans` | buat transaksi peminjaman (`member_id`, `user_id`, `tanggal_pinjam`, `tanggal_kembali`, `book_ids[]`) |
+| PUT | `/loans/{id}/kembalikan` | tandai peminjaman sebagai dikembalikan |
+| GET | `/stats` | total buku, total anggota, dan peminjaman aktif |
+
+Contoh:
+
+```bash
+curl http://127.0.0.1:8000/api/stats
+curl "http://127.0.0.1:8000/api/books?judul=laskar"
+```
+
+## Pemecahan Masalah
+
+| Gejala | Penyebab dan solusi |
+|---|---|
+| Dashboard menampilkan angka 0 | server port 8011 belum dijalankan, atau `INTERNAL_API_URL` salah. Jalankan `php artisan config:clear` setelah mengubah `.env` |
+| Error `could not find driver` atau `Connection refused` | MySQL belum menyala, atau pengaturan `DB_*` di `.env` belum benar |
+| Nama pada data demo bergaya Barat | `APP_FAKER_LOCALE` belum `id_ID` saat seeding. Ubah `.env`, lalu ulangi `php artisan migrate:fresh --seed` |
+| Halaman error `View ... not found` setelah mengubah file | jalankan `php artisan view:clear` |
+
+## Perbedaan Model, View, dan Controller
+
+Model bertanggung jawab mengelola data dan aturan bisnis yang berkaitan dengan database. View bertanggung jawab menampilkan halaman yang dilihat oleh pengguna. Controller menerima request pengguna, memprosesnya melalui Model, kemudian mengirimkan hasilnya kepada View.
