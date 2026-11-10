@@ -15,6 +15,10 @@
         table { border-collapse: collapse; width: 100%; margin-top: 16px; }
         th, td { border: 1px solid #ccc; padding: 8px 12px; text-align: left; }
         .alert-success { background: #d1fae5; color: #065f46; padding: 10px 14px; border-radius: 4px; margin-bottom: 16px; }
+        .badge { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: 13px; font-weight: bold; }
+        .badge-dikembalikan { background: #d1fae5; color: #065f46; }
+        .badge-dipinjam { background: #fef3c7; color: #92400e; }
+        .badge-terlambat { background: #fee2e2; color: #991b1b; }
         .stats-grid { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 20px; }
         .stat-card { flex: 1; min-width: 160px; background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; text-align: center; }
         .stat-card .value { font-size: 32px; font-weight: bold; color: #1e3a8a; }

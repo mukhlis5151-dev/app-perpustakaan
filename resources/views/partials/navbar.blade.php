@@ -12,6 +12,7 @@
             <li><a href="{{ route('loans.report') }}" class="{{ request()->routeIs('loans.report') ? 'active' : '' }}">Laporan</a></li>
         </ul>
         <div class="navbar-user">
+            <a href="{{ route('profil.show') }}" class="{{ request()->routeIs('profil.*') ? 'active' : '' }}">Profil</a>
             <span>{{ auth()->user()->name }} ({{ ucfirst(auth()->user()->role) }})</span>
             <form action="{{ route('logout') }}" method="POST" class="inline">
                 @csrf

@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 
 class MemberController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $members = Member::paginate(10);
+        $members = Member::when(
+            $request->query('search'),
+            fn ($query, $search) => $query->where('nama', 'like', "%{$search}%")
+        )->paginate(10)->withQueryString();
 
         return view('members.index', compact('members'));
     }
