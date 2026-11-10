@@ -8,6 +8,14 @@
 
     <p><a href="{{ route('members.create') }}" class="btn">+ Tambah Anggota</a></p>
 
+    <form method="GET" action="{{ route('members.index') }}" class="inline">
+        <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari nama anggota...">
+        <button type="submit">Cari</button>
+        @if (request('search'))
+            <a href="{{ route('members.index') }}">Reset</a>
+        @endif
+    </form>
+
     <table>
         <thead>
             <tr>
